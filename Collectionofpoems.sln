@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35219.272
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collectionofpoems", "Collectionofpoems.csproj", "{F15FB0FC-7E19-459B-B409-DA5A71E356CB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F15FB0FC-7E19-459B-B409-DA5A71E356CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F15FB0FC-7E19-459B-B409-DA5A71E356CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F15FB0FC-7E19-459B-B409-DA5A71E356CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F15FB0FC-7E19-459B-B409-DA5A71E356CB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {35BD2E3D-C789-459C-B2CA-EEE89CE19B39}
+	EndGlobalSection
+EndGlobal
