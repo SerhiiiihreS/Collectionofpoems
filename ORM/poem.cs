@@ -8,11 +8,14 @@ namespace Collectionofpoems.ORM
 {
     internal class Poem
     {
-        public string Name { get; set; }=null;
-        public string Author {  get; set; } = null;
+        public string Name { get; set; }=null!;
+        public string Author {  get; set; } = null!;
         public int Year { get; set; }
-        public string Theme { get; set; } = null;
-        public string Text { get; set; } = null;
+        public string Theme { get; set; } = null!;
+        public string Text { get; set; } = null!;
+
+        public override string ToString() => $"'{Name}' by {Author} @ {Year} of {Theme}/n{Text}";
+       
 
 
     }

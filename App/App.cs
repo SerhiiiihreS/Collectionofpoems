@@ -1,13 +1,9 @@
 ﻿using Collectionofpoems.ORM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Text.Json;
-using static System.Reflection.Metadata.BlobBuilder;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
+using System.Text;
+
 
 namespace Collectionofpoems.App
 
@@ -16,21 +12,24 @@ namespace Collectionofpoems.App
     {
         private List<Poem> poems = [];
         public void Run()
-        { 
+        {
             InitStore();
-            foreach( Poem poem in poems)
+            Console.WriteLine("--------------------------");
+            foreach (Poem poem in poems)
             {
                 Console.WriteLine(poem);
             }
             Console.WriteLine("--------------------------");
-            //LinqDemo();
+            LinqDemo();
 
             Console.WriteLine("-----------------------");
             Console.WriteLine(SerializeStoreJson());
-            Console.WriteLine(SerializeStoreXml());
-
+            Console.WriteLine("-----------------------");
+            Console.WriteLine("-----------------------");
             SaveStore();
-            SaveStore("xml");
+            Console.WriteLine("-----------------------");
+            LoadStore();
+
         }
 
         private void LoadStore()
@@ -72,18 +71,6 @@ namespace Collectionofpoems.App
                 String fileContent = File.ReadAllText(filesLinq[choice].FullName);
 
                 poems = JsonSerializer.Deserialize<List<Poem>>(fileContent)!;
-            }
-            else if (filesLinq[choice].Extension == ".xml")
-            {
-                XmlSerializer xmlSerializer = new(poems.GetType());
-                poems = xmlSerializer.Deserialize(
-                        File.OpenText(filesLinq[choice].FullName)
-                    ) as List< Poem>
-                    ?? throw new Exception("Deserialization error ");
-            }
-            else
-            {
-                Console.WriteLine("Unsupported format");
             }
         }
 
@@ -129,21 +116,14 @@ namespace Collectionofpoems.App
                 Console.WriteLine(poem);
             }
             // Вивести авторів, що мають книги, назва яких починається з "Т"
-            var query =                                // Where - фільтрує
-                poems                                  // Select - перетворює
-                .Where(b => b.Name.StartsWith("Z"))   //  на вході b - Book
-                .Select(b => b.Author);                //  на виході b.Author
-                                                       // query - це правило, генератор, запит - НЕ масив чи колекція
-                                                       // на даному місці коду запит НЕ виконаний, умови НЕ перевірені
+            // query - це правило, генератор, запит - НЕ масив чи колекція
+            // на даному місці коду запит НЕ виконаний, умови НЕ перевірені
 
-        String[] authors = query.ToArray();   // виконання запиту - побудова
             // масиву. На даному етапі виконуються перевірки
 
-            Console.WriteLine("-----------------------");
-            Console.WriteLine(String.Join(", ", authors));
         }
 
-private String SerializeStoreXml()
+        private String SerializeStoreXml()
         {
             /* Серіалізація (serial - послідовність) - подання об'єктів у
              * вигляді, придатному для передачі каналом або збереження.
@@ -171,7 +151,7 @@ private String SerializeStoreXml()
              * - через формалізм Stream
              * - через програмний формалізм
              */
-            using FileStream fileStream = new($"{dirName}/store.{format}", FileMode.Create);
+            using FileStream fileStream = new($"{dirName}/collectionOFpoems.{format}", FileMode.Create);
             String serializedStore = format switch
             {
                 "json" => SerializeStoreJson(),
@@ -181,25 +161,25 @@ private String SerializeStoreXml()
             byte[] code = System.Text.Encoding.UTF8.GetBytes(serializedStore);
             fileStream.Write(code, 0, code.Length);
         }
-        
+
         public void InitStore()
         {
             poems.Add(new Poem()
             {
-                Name= "Zapovit",
-                Author= "Taras Shevchenko",
-                Year=1845,
-                Theme= "politics",
-                Text= "When I am dead, bury me\r\nIn my beloved Ukraine,\r\nMy tomb upon a grave mound high\r\nAmid the spreading plain,\r\nSo that the fields, the boundless steppes,\r\nThe Dnieper's plunging shore\r\nMy eyes could see, my ears could hear\r\nThe mighty river roar."
+                Name = "Zapovit",
+                Author = "Taras Shevchenko",
+                Year = 1845,
+                Theme = "politics",
+                Text = "When I am dead, bury me\r\nIn my beloved Ukraine,\r\nMy tomb upon a grave mound high\r\nAmid the spreading plain,\r\nSo that the fields, the boundless steppes,\r\nThe Dnieper's plunging shore\r\nMy eyes could see, my ears could hear\r\nThe mighty river roar."
 
             });
             poems.Add(new Poem()
             {
-                Name= "Contra spem spero",
-                Author= "Lesya Ukrainka",
-                Year =1910,
-                Theme= "politics",
-                Text= "For now springtime comes, agleam with gold!\r\nShall thus in grief and wailing for ill-fortune\r\nAll the tale of my young years be told?\r\n\r\nNo, I want to smile through tears and weeping.,\r\nSing my songs where evil holds its sway,\r\nHopeless, a steadfast hope forever keeping,\r\nI want to live! You thoughts of grief, away!"
+                Name = "Contra spem spero",
+                Author = "Lesya Ukrainka",
+                Year = 1910,
+                Theme = "politics",
+                Text = "For now springtime comes, agleam with gold!\r\nShall thus in grief and wailing for ill-fortune\r\nAll the tale of my young years be told?\r\n\r\nNo, I want to smile through tears and weeping.,\r\nSing my songs where evil holds its sway,\r\nHopeless, a steadfast hope forever keeping,\r\nI want to live! You thoughts of grief, away!"
             });
             poems.Add(new Poem()
             {
@@ -219,6 +199,15 @@ private String SerializeStoreXml()
             });
 
         }
+        public void Print()
+        {
+            for (int i = 0; i < poems.Count; i++)
+            {
+                Console.Write(poems[i].ToString());
+            }
+        }
 
     }
+
+
 }
