@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Collectionofpoems.ORM
 {
-    internal class poem
+    internal class Poem
     {
         public string Name { get; set; }=null;
         public string Author {  get; set; } = null;
