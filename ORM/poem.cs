@@ -14,7 +14,7 @@ namespace Collectionofpoems.ORM
         public string Theme { get; set; } = null!;
         public string Text { get; set; } = null!;
 
-        public override string ToString() => $"'{Name}' by {Author} @ {Year} of {Theme}/n{Text}";
+        public override string ToString() => $"'{Name}'\r\n {Author}\r\n{Year} \r\n{Theme}\r\n \r\n{Text}";
        
 
 

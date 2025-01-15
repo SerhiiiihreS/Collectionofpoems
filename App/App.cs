@@ -15,21 +15,57 @@ namespace Collectionofpoems.App
         {
             InitStore();
             Console.WriteLine("--------------------------");
+            Join();
+            Console.WriteLine("--------------------------");
             foreach (Poem poem in poems)
             {
                 Console.WriteLine(poem);
+                Console.WriteLine("-------------------------------------------------------------");
             }
+            SaveStore();
+            Delet();
             Console.WriteLine("--------------------------");
+            foreach (Poem poem in poems)
+            {
+                Console.WriteLine(poem);
+                Console.WriteLine("-------------------------------------------------------------");
+            }
             LinqDemo();
 
-            Console.WriteLine("-----------------------");
-            Console.WriteLine(SerializeStoreJson());
-            Console.WriteLine("-----------------------");
-            Console.WriteLine("-----------------------");
             SaveStore();
+
             Console.WriteLine("-----------------------");
             LoadStore();
 
+        }
+
+        private void Join()
+        {
+            poems.Add(new Poem()
+            {
+                Name = Convert.ToString(Console.ReadLine()),
+                Author= Convert.ToString(Console.ReadLine()),
+                Year= Convert.ToInt32(Console.ReadLine()),
+                Theme= Convert.ToString(Console.ReadLine()),
+                Text= Convert.ToString(Console.ReadLine())
+
+            });
+        }
+        private void Delet()
+        {
+            Console.WriteLine("Enter number poen for delete=>");
+            int a =Convert.ToInt32(Console.ReadLine());
+            for (int i = 0; i < poems.Count; i++) {
+                if (i == (a - 1))
+                {
+                    poems.Remove(poems[i]);
+                }
+            }
+        }
+
+      private void Srt()
+        {
+            poems.Sort();
         }
 
         private void LoadStore()
@@ -95,8 +131,6 @@ namespace Collectionofpoems.App
              */
 
             String dirName = Directory.GetCurrentDirectory();
-            // перевіряємо чи містить директорія частину "/Debug/"
-            // передбачаємо також \Debug\, \debug\
             Regex pattern = new(@"[/\\][Dd]ebug[/\\]");
             if (pattern.IsMatch(dirName))
             {
@@ -107,58 +141,24 @@ namespace Collectionofpoems.App
 
         private void LinqDemo()
         {
-            //    /* LINQ - Language integrated queries
-            //     * Технологія для роботи з множинними даними (колекціями, масивами)
-            //     * базою якої виступила мова SQL
-            //     */
             foreach (var poem in poems.Where(b => b.Year > 1845))
             {
                 Console.WriteLine(poem);
             }
-            // Вивести авторів, що мають книги, назва яких починається з "Т"
-            // query - це правило, генератор, запит - НЕ масив чи колекція
-            // на даному місці коду запит НЕ виконаний, умови НЕ перевірені
-
-            // масиву. На даному етапі виконуються перевірки
 
         }
 
-        private String SerializeStoreXml()
-        {
-            /* Серіалізація (serial - послідовність) - подання об'єктів у
-             * вигляді, придатному для передачі каналом або збереження.
-             * obj {
-             *  field1      Serialize
-             *  field2      ========>   "obj: {field1: val1, ...} "
-             *  field3
-             * }
-             */
-            StringWriter stringWriter = new();
-            XmlSerializer serializer = new(poems.GetType());
-            serializer.Serialize(stringWriter, poems);
-            return stringWriter.ToString();
-        }
 
         private String SerializeStoreJson()
         {
             return JsonSerializer.Serialize(poems);
         }
 
-        private void SaveStore(String format = "json")
+        private void SaveStore()
         {
             String dirName = GetWorkDirectory();
-            /* Робота з файлами. Запис.
-             * - через формалізм Stream
-             * - через програмний формалізм
-             */
-            using FileStream fileStream = new($"{dirName}/collectionOFpoems.{format}", FileMode.Create);
-            String serializedStore = format switch
-            {
-                "json" => SerializeStoreJson(),
-                "xml" => SerializeStoreXml(),
-                _ => throw new Exception("Unsupported format " + format)
-            };
-            byte[] code = System.Text.Encoding.UTF8.GetBytes(serializedStore);
+            using FileStream fileStream = new($"{dirName}/collectionOFpoems.json", FileMode.Create);
+            byte[] code = System.Text.Encoding.UTF8.GetBytes(SerializeStoreJson());
             fileStream.Write(code, 0, code.Length);
         }
 
@@ -198,13 +198,6 @@ namespace Collectionofpoems.App
                 Text = "The mighty Dnieper roars and bellows,\r\nThe wind in anger howls and raves,\r\nDown to the ground it bends the willows,\r\nAnd mountain-high lifts up the waves.\r\nThe pale-faced moon picked out this moment\r\nTo peek out from behind a cloud,\r\nLike a canoe upon the ocean\r\nIt first tips up, and then dips down.\r\nThe cocks don't crow to wake the morning,\r\nThere's not as yet a sound of man,\r\nThe owls in glades call out their warnings,\r\nAnd ash trees creak and creak again."
             });
 
-        }
-        public void Print()
-        {
-            for (int i = 0; i < poems.Count; i++)
-            {
-                Console.Write(poems[i].ToString());
-            }
         }
 
     }
