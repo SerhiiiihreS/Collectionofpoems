@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using System.Text;
+using static System.Reflection.Metadata.BlobBuilder;
 
 
 namespace Collectionofpoems.App
@@ -15,30 +16,45 @@ namespace Collectionofpoems.App
         {
             InitStore();
             Console.WriteLine("--------------------------");
-            Join();
-            Console.WriteLine("--------------------------");
             foreach (Poem poem in poems)
             {
                 Console.WriteLine(poem);
                 Console.WriteLine("-------------------------------------------------------------");
             }
-            SaveStore();
-            Delet();
-            Console.WriteLine("--------------------------");
-            foreach (Poem poem in poems)
-            {
-                Console.WriteLine(poem);
-                Console.WriteLine("-------------------------------------------------------------");
-            }
-            LinqDemo();
-
-            SaveStore();
-
-            Console.WriteLine("-----------------------");
+            Console.WriteLine("-------------------------------------------------------------");
+            Console.WriteLine("-------------------------------------------------------------");
             LoadStore();
+            //Join();
+            //Console.WriteLine("--------------------------");
+            //foreach (Poem poem in poems)
+            //{
+            //    Console.WriteLine(poem);
+            //    Console.WriteLine("-------------------------------------------------------------");
+            //}
+            //SaveStore();
+            //Delet();
+            //Console.WriteLine("--------------------------");
+            //foreach (Poem poem in poems)
+            //{
+            //    Console.WriteLine(poem);
+            //    Console.WriteLine("-------------------------------------------------------------");
+            //}
+            //Search();
+            //Replace();
+            //Console.WriteLine("--------------------------");
+            //foreach (Poem poem in poems)
+            //{
+            //    Console.WriteLine(poem);
+            //    Console.WriteLine("-------------------------------------------------------------");
+            //}
+
+            //Console.WriteLine("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+            //LinqDemo();
 
         }
 
+
+        //1) додавати вірші;
         private void Join()
         {
             poems.Add(new Poem()
@@ -51,6 +67,7 @@ namespace Collectionofpoems.App
 
             });
         }
+       //2) видаляти вірші;
         private void Delet()
         {
             Console.WriteLine("Enter number poen for delete=>");
@@ -63,47 +80,140 @@ namespace Collectionofpoems.App
             }
         }
 
-      private void Srt()
+        //3) змінювати інформацію про вірші;
+        private void Replace()
         {
-            poems.Sort();
+            Console.WriteLine("search by:\r\nName - 1\r\nAuthor - 2\r\nYear - 3\r\nTheme - 4");
+            int sc = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Enter what to find ->");
+            string sck = Convert.ToString(Console.ReadLine());
+            Console.WriteLine("Enter what to replace with ->");
+            string rep = Convert.ToString(Console.ReadLine());
+            Console.WriteLine("|||||||||||||||||||||||||||||||||||||||||||");
+            if (sc == 1)
+            {
+                foreach (var poem in poems.Where(b => { return b.Name == sck; }))
+                {
+                    poem.Name = rep;
+                    Console.WriteLine(poem);
+                }
+
+            }
+            else if (sc == 2)
+            {
+                foreach (var poem in poems.Where(b => { return b.Author == sck; }))
+                {
+                    poem.Author = rep;
+                    Console.WriteLine(poem);
+                }
+
+            }
+            else if (sc == 3)
+            {
+                int sck2 = Convert.ToInt32(sck);
+                int rep1 = Convert.ToInt32(rep);
+                foreach (var poem in poems.Where(b => { return b.Year == sck2; }))
+                {
+                    poem.Year = rep1;
+                    Console.WriteLine(poem);
+                }
+
+            }
+            else if (sc == 4)
+            {
+                foreach (var poem in poems.Where(b => { return b.Theme == sck; }))
+                {
+                    poem.Theme = rep;
+                    Console.WriteLine(poem);
+                }
+
+            }
+
+        }
+        //4)шукати вірш за різними характеристиками;
+        private void Search()
+        {
+            Console.WriteLine("search by:\r\nName - 1\r\nAuthor - 2\r\nYear - 3\r\nTheme - 4");
+            int sc = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Enter what to find ->");
+            string sck = Convert.ToString(Console.ReadLine());
+
+            Console.WriteLine("|||||||||||||||||||||||||||||||||||||||||||");
+            if (sc == 1)
+            {
+                foreach (var poem in poems.Where(b => { return b.Name == sck; }))
+                {
+
+                    Console.WriteLine(poem);
+                }
+
+            }
+            else if (sc == 2)
+            {
+                foreach (var poem in poems.Where(b => { return b.Author == sck; }))
+                {
+                    Console.WriteLine(poem);
+                }
+
+            }
+            else if (sc == 3)
+            {
+                int sck2 = Convert.ToInt32(sck);
+                foreach (var poem in poems.Where(b => { return b.Year == sck2; }))
+                {
+                    Console.WriteLine(poem);
+                }
+
+            }
+            else if (sc == 4)
+            {
+                foreach (var poem in poems.Where(b => { return b.Theme == sck; }))
+                {
+                    Console.WriteLine(poem);
+                }
+
+            }
+
+        }
+        //5)зберігати колекцію віршів у файл;
+        private String SerializeStoreJson()
+        {
+            return JsonSerializer.Serialize(poems);
         }
 
+        private void SaveStore()
+        {
+            String dirName = GetWorkDirectory();
+            using FileStream fileStream = new($"{dirName}/collectionOFpoems.json", FileMode.Create);
+            byte[] code = System.Text.Encoding.UTF8.GetBytes(SerializeStoreJson());
+            fileStream.Write(code, 0, code.Length);
+        }
+        //6) завантажувати колекцію віршів з файлу.
         private void LoadStore()
         {
             String dirName = GetWorkDirectory();
-            // Збираємо всі файли, які мають ім'я "store...."
             DirectoryInfo dir = new(dirName);
-            // готуємо колекцію
             List<FileInfo> files = new();
-            // Перебираємо усі файли, збираємо до колекції ті, що проходять перевірку
-            //  - ім'я починається з "store"
-            //  - розширення або ".json" або ".xml"
             foreach (FileInfo fileInfo in dir.GetFiles())
             {
-                if (fileInfo.Name.StartsWith("Wings"))
+                if (fileInfo.Name.Contains("Wings"))
                 {
                     files.Add(fileInfo);
                 }
             }
-            // Те ж саме, тільки LINQ
             List<FileInfo> filesLinq =
                 dir
                 .GetFiles()
-                .Where(f => f.Name.StartsWith("Wings"))
+                .Where(f => f.Name.Contains("Wings"))
                 .ToList();
-            Console.WriteLine("Який файл використати?");
+            Console.WriteLine("Which file to use?");
             for (int i = 0; i < filesLinq.Count; i++)
             {
                 Console.WriteLine("{0} {1}", i + 1, filesLinq[i]);
             }
             int choice = Convert.ToInt32(Console.ReadLine()) - 1;
-            // TODO: перевірити на валідність
-            // 
-            // Десеріалізуємо
-            // визначаємо розширення файлу
             if (filesLinq[choice].Extension == ".json")
             {
-                // другий спосіб роботи з файлами - заготовлені у мові інструменти
                 String fileContent = File.ReadAllText(filesLinq[choice].FullName);
 
                 poems = JsonSerializer.Deserialize<List<Poem>>(fileContent)!;
@@ -138,29 +248,32 @@ namespace Collectionofpoems.App
             }
             return dirName;
         }
+       
+
+
 
         private void LinqDemo()
         {
-            foreach (var poem in poems.Where(b => b.Year > 1845))
+            foreach (var poem in poems.Where(b => b.Year > 1500))
             {
                 Console.WriteLine(poem);
             }
+            var query =                              
+            poems                                  
+                .Where(b => b.Theme.StartsWith("n"))   
+                .Select(b => b.Author);                
+            
+           
 
+            String[] authors = query.ToArray();   
+            
+
+            Console.WriteLine("-----------------------");
+            Console.WriteLine(String.Join(", ", authors));
         }
 
 
-        private String SerializeStoreJson()
-        {
-            return JsonSerializer.Serialize(poems);
-        }
-
-        private void SaveStore()
-        {
-            String dirName = GetWorkDirectory();
-            using FileStream fileStream = new($"{dirName}/collectionOFpoems.json", FileMode.Create);
-            byte[] code = System.Text.Encoding.UTF8.GetBytes(SerializeStoreJson());
-            fileStream.Write(code, 0, code.Length);
-        }
+        
 
         public void InitStore()
         {
