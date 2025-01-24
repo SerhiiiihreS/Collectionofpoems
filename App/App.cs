@@ -23,7 +23,6 @@ namespace Collectionofpoems.App
             }
             Console.WriteLine("-------------------------------------------------------------");
             Console.WriteLine("-------------------------------------------------------------");
-            LoadStore();
             //Join();
             //Console.WriteLine("--------------------------");
             //foreach (Poem poem in poems)
@@ -47,10 +46,8 @@ namespace Collectionofpoems.App
             //    Console.WriteLine(poem);
             //    Console.WriteLine("-------------------------------------------------------------");
             //}
-
+            //LoadStore();
             //Console.WriteLine("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-            //LinqDemo();
-
         }
 
 
@@ -60,18 +57,18 @@ namespace Collectionofpoems.App
             poems.Add(new Poem()
             {
                 Name = Convert.ToString(Console.ReadLine()),
-                Author= Convert.ToString(Console.ReadLine()),
-                Year= Convert.ToInt32(Console.ReadLine()),
-                Theme= Convert.ToString(Console.ReadLine()),
-                Text= Convert.ToString(Console.ReadLine())
+                Author = Convert.ToString(Console.ReadLine()),
+                Year = Convert.ToInt32(Console.ReadLine()),
+                Theme = Convert.ToString(Console.ReadLine()),
+                Text = Convert.ToString(Console.ReadLine())
 
             });
         }
-       //2) видаляти вірші;
+        //2) видаляти вірші;
         private void Delet()
         {
             Console.WriteLine("Enter number poen for delete=>");
-            int a =Convert.ToInt32(Console.ReadLine());
+            int a = Convert.ToInt32(Console.ReadLine());
             for (int i = 0; i < poems.Count; i++) {
                 if (i == (a - 1))
                 {
@@ -248,32 +245,12 @@ namespace Collectionofpoems.App
             }
             return dirName;
         }
-       
 
 
 
-        private void LinqDemo()
-        {
-            foreach (var poem in poems.Where(b => b.Year > 1500))
-            {
-                Console.WriteLine(poem);
-            }
-            var query =                              
-            poems                                  
-                .Where(b => b.Theme.StartsWith("n"))   
-                .Select(b => b.Author);                
-            
-           
-
-            String[] authors = query.ToArray();   
-            
-
-            Console.WriteLine("-----------------------");
-            Console.WriteLine(String.Join(", ", authors));
-        }
 
 
-        
+
 
         public void InitStore()
         {
